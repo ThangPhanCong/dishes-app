@@ -1,0 +1,11 @@
+.button-next {
+    float: right;
+}
+
+label {
+    float: left;
+}
+
+.alert-error {
+    /* float: left; */
+}
