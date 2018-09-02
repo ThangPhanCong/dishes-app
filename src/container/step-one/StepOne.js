@@ -4,7 +4,7 @@ import {MEALS, TITLE_MEALS, TITLE_PEOPLE} from "../../common/Const";
 import {Container, Col, Form, FormGroup, Input, Label, Button, Alert} from "reactstrap";
 import { Link } from "react-router-dom";
 import "./StepOne.css";
-import {setOrder} from "../../services/StorageService";
+import {setOrder, removeOrder} from "../../services/StorageService";
 
 class StepOne extends Component {
     state = {

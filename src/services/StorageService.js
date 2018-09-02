@@ -8,9 +8,13 @@ const setOrder = (key, obj) => {
     const newOrder = getOrder(key);
     console.log("get ne:", newOrder)
 
-    const newObj = {...obj, ...newOrder};
+    const newObj = {...newOrder, ...obj};
     console.log("newObj", newObj)
     return store.set(key, newObj);
-}
+};
 
-export {setOrder, getOrder};
+const removeOrder = (key) => {
+    return store.remove(key)
+};
+
+export {setOrder, getOrder, removeOrder};

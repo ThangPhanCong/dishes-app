@@ -1,0 +1,27 @@
+.button-group {
+    margin-top: 50px;
+}
+
+.card-container {
+    margin-top: 10px;
+    width: 120px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-container:hover {
+    background-color: #d3dbe2;
+    cursor: pointer;
+}
+
+.cancel-item {
+    position: absolute;
+    top: 3px;
+    right: 5px;
+}
+
+.button-plus {
+    margin-top: 10px;
+}
