@@ -6,10 +6,8 @@ const getOrder = (key) => {
 
 const setOrder = (key, obj) => {
     const newOrder = getOrder(key);
-    console.log("get ne:", newOrder)
 
     const newObj = {...newOrder, ...obj};
-    console.log("newObj", newObj)
     return store.set(key, newObj);
 };
 

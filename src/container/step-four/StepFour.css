@@ -1,0 +1,26 @@
+.header {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.order-item {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.list-dish {
+    margin-top: 30px;
+    border-radius: 5px;
+}
+
+.dish-item {
+    border: solid 1px black;
+}
+
+.name-dish {
+    color: #007BFF;
+}
+
+.count-dish {
+    color: #28A745;
+}

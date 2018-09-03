@@ -7,7 +7,8 @@ import "./StepTwo.css";
 class StepTwo extends Component {
     state = {
         restaurants: [],
-        restaurantSelected: null
+        restaurantSelected: null,
+        isShowError: false
     };
 
     componentDidMount() {
@@ -19,9 +20,12 @@ class StepTwo extends Component {
             const data = Data.dishes;
             const dataOrders = await getOrder('orders');
 
-            const restaurants = data.filter(d => d.availableMeals.includes(dataOrders.meal));
+            if (dataOrders && dataOrders.meal) {
+                const restaurants = data.filter(d => d.availableMeals.includes(dataOrders.meal));
 
-            this.setState({ restaurants });
+                this.setState({ restaurants, restaurantSelected: dataOrders.restaurant ? dataOrders.restaurant: '' });
+            }
+
         } catch (error) {
             console.log("GetRestaurant._error:", error);
         }
@@ -30,7 +34,11 @@ class StepTwo extends Component {
     _selectRestaurant(selected) {
         const restaurantSelected = selected.target.value;
 
-        this.setState({restaurantSelected});
+        this.setState({restaurantSelected, isShowError: false});
+    }
+
+    _goBack(){
+        this.props.history.goBack();
     }
 
     async _handleNextStep() {
@@ -40,21 +48,36 @@ class StepTwo extends Component {
             if (restaurantSelected) {
                 await setOrder('orders', { restaurant: restaurantSelected });
                 this.props.history.push('/StepThree');
+            } else {
+                this.setState({isShowError: true})
             }
         } catch (error) {
             console.log("SetOrderRestaurant._error:", error);
         }
     }
 
+    _renderAlertError() {
+        const { isShowError } = this.state;
+
+        return (
+            <div>
+                { isShowError ?  <Alert color="danger">
+                    Please fill restaurant!
+                </Alert> : null}
+            </div>
+
+        )
+    }
+
     _renderRestaurant() {
-        const { restaurants } = this.state;
+        const { restaurants, restaurantSelected } = this.state;
         
         return (
             <Form>
                 <Label>Please select a Restaurant</Label>
                 <FormGroup>
                     <Input type="select" name="select"
-                        // value={payloadSelected.meal}
+                        value={restaurantSelected || ''}
                         onChange={(value) => this._selectRestaurant(value)}
                         >
                         <option value=""/>
@@ -71,8 +94,7 @@ class StepTwo extends Component {
         return(
             <Row>
                 <Col sm={6}>
-                    <Button outline color="success" className="button-previous"
-                    >
+                    <Button outline color="success" className="button-previous" onClick={() => this._goBack()}>
                         Previous
                     </Button>
                 </Col>
@@ -89,6 +111,7 @@ class StepTwo extends Component {
         return(
             <div>
                 {this._renderRestaurant()}
+                {this._renderAlertError()}
                 {this._renderButton()}
             </div>
         )

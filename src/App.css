@@ -27,3 +27,25 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: relative;
+  left: 27px;
+}
+
+.nav-item {
+  border: solid 1px black;
+  width: 100px;
+}
+
+.nav-active {
+  background-color: darkcyan;
+  color: #FFF;
+}
+
+.app-container {
+  margin-top: 30px;
+}

@@ -4,7 +4,7 @@ import {MEALS, TITLE_MEALS, TITLE_PEOPLE} from "../../common/Const";
 import {Container, Col, Form, FormGroup, Input, Label, Button, Alert} from "reactstrap";
 import { Link } from "react-router-dom";
 import "./StepOne.css";
-import {setOrder, removeOrder} from "../../services/StorageService";
+import {setOrder, removeOrder, getOrder} from "../../services/StorageService";
 
 class StepOne extends Component {
     state = {
@@ -18,11 +18,18 @@ class StepOne extends Component {
         this._getData();
     }
 
-    _getData() {
-        this.setState({
-            data: Data.dishes,
-            meals: MEALS
-        });
+    async _getData() {
+        try {
+            const dataOrders = await getOrder('orders');
+            console.log("data orders:", dataOrders)
+            this.setState({
+                data: Data.dishes,
+                meals: MEALS,
+                payloadSelected: dataOrders || {}
+            });
+        } catch (error) {
+            console.log("GetMeal.error:", error);
+        }
     }
 
     _changePayloadSelected(selected, title) {
@@ -51,7 +58,7 @@ class StepOne extends Component {
                 <Label>Please Select a meal</Label>
                 <FormGroup>
                     <Input type="select" name="select"
-                        value={payloadSelected.meal}
+                        value={payloadSelected && payloadSelected.meal || ''}
                         onChange={(value) => this._changePayloadSelected(value, TITLE_MEALS)}>
                         {
                             meals.map((meal, index) => <option key={index}>{meal}</option>)
@@ -63,11 +70,16 @@ class StepOne extends Component {
     }
 
     _renderNumberOfPeople() {
+        const { payloadSelected } = this.state;
+
         return(
             <Form>
                 <Label>Please Enter Number of people</Label>
                 <FormGroup>
-                    <Input type="number" name="number" max={10} min={1} onChange={(value) => this._changePayloadSelected(value, TITLE_PEOPLE)}/>
+                    <Input type="number"
+                        name="number"
+                        value={payloadSelected && payloadSelected.people || ''}
+                        max={10} min={1} onChange={(value) => this._changePayloadSelected(value, TITLE_PEOPLE)} />
                 </FormGroup>
             </Form>
         )
@@ -75,7 +87,7 @@ class StepOne extends Component {
 
     _renderError() {
         const {payloadSelected} = this.state;
-        const isDisabled = !payloadSelected.meal || !payloadSelected.people;
+        const isDisabled = payloadSelected ? (!payloadSelected.meal || !payloadSelected.people) : true ;
 
         return(
             <div>
@@ -87,8 +99,8 @@ class StepOne extends Component {
     }
 
     _renderButtonNext() {
-        const {payloadSelected} = this.state;
-        const isDisabled = !payloadSelected.meal || !payloadSelected.people;
+        const { payloadSelected } = this.state;
+        const isDisabled = payloadSelected ? (!payloadSelected.meal || !payloadSelected.people) : true;
         
         return (
             <Button outline color="primary" className="button-next" onClick={isDisabled ? () => {} : () => this._handleNextStep()}>

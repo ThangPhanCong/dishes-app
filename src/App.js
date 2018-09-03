@@ -1,26 +1,55 @@
 import React, { Component } from 'react';
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, NavLink } from "react-router-dom";
 import StepOne from './container/step-one/StepOne';
 import StepTwo from './container/step-two/StepTwo';
 import {Container, Col, Form, FormGroup, Input, Label, Button, Row} from "reactstrap";
 import StepThree from './container/step-three/StepThree';
+import StepFour from './container/step-four/StepFour';
 
 class App extends Component {
+
+  _checkActive(location) {
+    if(location == '/') return 'nav-item nav-active';
+    if(this.props.location) {
+      console.log("ok men:", this.props.location.pathname)
+
+      if (location === this.props.location.pathname) {
+        console.log("ok men:", this.props.location.pathname)
+        return 'nav-item nav-active';
+      };
+    }
+   
+
+    return 'nav-item';
+  }
+
+  _renderNavBar() {
+    return(
+      <Row className="nav-bar">
+        <NavLink to="/" exact activeClassName="nav-active" className="nav-item">Step 1</NavLink>
+        <NavLink to="/StepTwo" activeClassName="nav-active" className="nav-item">Step 2</NavLink>
+        <NavLink to="/StepThree" activeClassName="nav-active" className="nav-item">Step 3</NavLink>
+        <NavLink to="/StepFour" activeClassName="nav-active" className="nav-item">Step 4</NavLink>
+      </Row>
+    )
+  }
   render() {
     return (
       <Container className="App">
-        <Row>
+        {this._renderNavBar()}
+        <Row className="app-container">
           <Col sm={4}/>
           <Col sm={5}>
-            <BrowserRouter>
+            
               <div>
                 <Route path="/" exact component={StepOne} />
                 <Route path="/StepTwo" exact component={StepTwo} />
                 <Route path="/StepThree" exact component={StepThree} />
+                <Route path="/StepFour" exact component={StepFour} />
               </div>
-            </BrowserRouter>
+            
           </Col>
         </Row>
       </Container>
