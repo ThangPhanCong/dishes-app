@@ -10,7 +10,8 @@ class StepThree extends Component {
         dishes: [],
         selectedDish: [],
         currentDish: {},
-        isShowError: false
+        isShowError: false,
+        error: ''
     };
 
     componentDidMount() {
@@ -42,14 +43,20 @@ class StepThree extends Component {
 
     _addDish() {
         const { selectedDish, currentDish } = this.state;
+        const checkDish = selectedDish.filter(s => s.name_dish === currentDish.name_dish);
 
-        if (currentDish && currentDish.count_dish && currentDish.name_dish) {
-            selectedDish.push(currentDish);
-            setOrder('orders', { dish: selectedDish });
-            this.setState({ selectedDish, currentDish: {}, isShowError: false });
+        if (checkDish.length) {
+            this.setState({isShowError: true, error: 'Dish is choosed!'})
         } else {
-            this.setState({ isShowError: true })
+            if (currentDish && currentDish.count_dish && currentDish.name_dish) {
+                selectedDish.push(currentDish);
+                setOrder('orders', { dish: selectedDish });
+                this.setState({ selectedDish, currentDish: {}, isShowError: false });
+            } else {
+                this.setState({ isShowError: true, error: 'Please Insert No of servings and Name Dish!' })
+            }
         }
+
     }
 
     _cancelItem(index) {
@@ -68,12 +75,22 @@ class StepThree extends Component {
     async _handleNextStep() {
         try {
             const { selectedDish } = this.state;
+            const dataOrders = await getOrder('orders');
+            let sum = 0;
+
+            selectedDish.map((select) => {
+                sum += parseInt(select.count_dish);
+            });
 
             if (selectedDish.length) {
                 // await setOrder('orders', { dish: selectedDish });
-                this.props.history.push('/StepFour');
+                if (sum * selectedDish.length < parseInt(dataOrders.people)) {
+                    this.setState({ isShowError: true, error: 'The total number of dishes not correct!' })
+                } else {
+                    this.props.history.push('/StepFour');
+                }
             } else {
-                this.setState({isShowError: true});
+                this.setState({ isShowError: true, error: 'Please Insert No of servings and Name Dish!' });
             }
         } catch (error) {
             console.log("SetOrderDishes._error:", error);
@@ -156,13 +173,13 @@ class StepThree extends Component {
     }
 
     _renderAlertError() {
-        const { isShowError } = this.state;
+        const { isShowError, error } = this.state;
 
         return (
             <div>
                 {isShowError ?
                     <Alert color="danger" className="alert-error">
-                        Please Insert No of servings and Name Dish!
+                       {error}
                     </Alert> : null}
             </div>
         )
