@@ -9,22 +9,6 @@ import StepThree from './container/step-three/StepThree';
 import StepFour from './container/step-four/StepFour';
 
 class App extends Component {
-
-  _checkActive(location) {
-    if(location == '/') return 'nav-item nav-active';
-    if(this.props.location) {
-      console.log("ok men:", this.props.location.pathname)
-
-      if (location === this.props.location.pathname) {
-        console.log("ok men:", this.props.location.pathname)
-        return 'nav-item nav-active';
-      };
-    }
-   
-
-    return 'nav-item';
-  }
-
   _renderNavBar() {
     return(
       <Row className="nav-bar">
@@ -35,6 +19,7 @@ class App extends Component {
       </Row>
     )
   }
+  
   render() {
     return (
       <Container className="App">

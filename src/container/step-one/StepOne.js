@@ -21,7 +21,7 @@ class StepOne extends Component {
     async _getData() {
         try {
             const dataOrders = await getOrder('orders');
-            console.log("data orders:", dataOrders)
+            
             this.setState({
                 data: Data.dishes,
                 meals: MEALS,
