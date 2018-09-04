@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Route, NavLink } from "react-router-dom";
+import { Route, NavLink, Redirect } from "react-router-dom";
 import StepOne from './container/step-one/StepOne';
 import StepTwo from './container/step-two/StepTwo';
 import {Container, Col, Form, FormGroup, Input, Label, Button, Row} from "reactstrap";
@@ -27,9 +27,9 @@ class App extends Component {
         <Row className="app-container">
           <Col sm={4}/>
           <Col sm={5}>
-            
               <div>
-                <Route path="/" exact component={StepOne} />
+                <Redirect to="/"/>
+                <Route exact path="/"  component={StepOne} />
                 <Route path="/StepTwo" exact component={StepTwo} />
                 <Route path="/StepThree" exact component={StepThree} />
                 <Route path="/StepFour" exact component={StepFour} />

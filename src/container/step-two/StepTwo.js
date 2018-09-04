@@ -8,7 +8,8 @@ class StepTwo extends Component {
     state = {
         restaurants: [],
         restaurantSelected: null,
-        isShowError: false
+        isShowError: false,
+        isRequire: false
     };
 
     componentDidMount() {
@@ -23,7 +24,9 @@ class StepTwo extends Component {
             if (dataOrders && dataOrders.meal) {
                 const restaurants = data.filter(d => d.availableMeals.includes(dataOrders.meal));
 
-                this.setState({ restaurants, restaurantSelected: dataOrders.restaurant ? dataOrders.restaurant: '' });
+                this.setState({ restaurants, restaurantSelected: dataOrders.restaurant ? dataOrders.restaurant: '', isRequire: false });
+            } else {
+                this.setState({isRequire: true})
             }
 
         } catch (error) {
@@ -69,6 +72,19 @@ class StepTwo extends Component {
         )
     }
 
+    _renderRequire() {
+        const { isShowError } = this.state;
+
+        return (
+            <div>
+                <Alert color="danger">
+                    Please fill previous step one!
+                </Alert>
+            </div>
+
+        )
+    }
+
     _renderRestaurant() {
         const { restaurants, restaurantSelected } = this.state;
         
@@ -108,11 +124,15 @@ class StepTwo extends Component {
     }
 
     render() {
+        const { isRequire } = this.state;
+
         return(
             <div>
+              {isRequire ? this._renderRequire() : <div>
                 {this._renderRestaurant()}
                 {this._renderAlertError()}
                 {this._renderButton()}
+              </div>}
             </div>
         )
     }

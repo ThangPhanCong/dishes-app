@@ -11,7 +11,8 @@ class StepThree extends Component {
         selectedDish: [],
         currentDish: {},
         isShowError: false,
-        error: ''
+        error: '',
+        isRequire: false
     };
 
     componentDidMount() {
@@ -25,7 +26,9 @@ class StepThree extends Component {
             if (dataOrders && dataOrders.meal && dataOrders.restaurant) {
                 const dishes = data.filter(d => d.restaurant === dataOrders.restaurant && d.availableMeals.includes(dataOrders.meal));
 
-                this.setState({dishes, selectedDish: dataOrders.dish ? dataOrders.dish : []});
+                this.setState({dishes, selectedDish: dataOrders.dish ? dataOrders.dish : [], isRequire: false});
+            } else {
+                this.setState({isRequire: true, error: 'Please fill previous step!'})
             }
            
         } catch (error) {
@@ -185,13 +188,29 @@ class StepThree extends Component {
         )
     }
 
+  _renderRequire() {
+    const { error } = this.state;
+
+    return (
+      <div>
+          <Alert color="danger" className="alert-error">
+            {error}
+          </Alert>
+      </div>
+    )
+  }
+
     render() {
+        const { isRequire } = this.state;
+
         return(
             <div>
+              {isRequire ? this._renderRequire() : <div>
                 {this._renderSelectDish()}
                 {this._renderDish()}
                 {this._renderAlertError()}
                 {this._renderButton()}
+              </div>}
             </div>
         )
     }

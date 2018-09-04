@@ -27,6 +27,7 @@ class StepFour extends Component {
         const { orders } = this.state;
 
         if(Object.keys(orders).length) {
+            console.log(orders);
             this.setState({isSubmit: true});
             removeOrder('orders');
         }
@@ -117,7 +118,7 @@ class StepFour extends Component {
 
         return(
             <div>
-                {isSubmit ? this._renderAlertSubmit() : orders ?
+                {isSubmit ? this._renderAlertSubmit() : orders && orders.dish ?
                     <div>
                         <Row>
                             {this._renderHeader()}
